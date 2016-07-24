@@ -2,6 +2,15 @@
 #include "cinder/app/RendererGl.h"
 #include "cinder/gl/gl.h"
 
+#include <regex>
+
+#include "Osc.h"
+
+#include "AudioSource.h"
+#include "InputState.h"
+#include "ProgramFactory.h"
+#include "ProgramState.h"
+
 // Settings
 #include "VDSettings.h"
 // Session
@@ -39,6 +48,13 @@ private:
 	VDTextureList				mTexs;
 	fs::path					mTexturesFilepath;
 	int							i, x;
+	std::shared_ptr<osc::ReceiverUdp> mOscReceiver;
+
+	ci::gl::FboRef a, b;
+
+	std::shared_ptr<ProgramState> mState;
+	ProgramFactory mFactory;
+	AudioSource mAudioSource;
 };
 
 
@@ -50,88 +66,75 @@ void _TBOX_PREFIX_App::setup()
 	mVDSession = VDSession::create(mVDSettings);
 	// Animation
 	mVDAnimation = VDAnimation::create(mVDSettings, mVDSession);
-	// initialize 
-#if (defined(  CINDER_MSW) )
-	mTexturesFilepath = getAssetPath("") / "defaulttextures.xml";
-#else
-	mTexturesFilepath = getAssetPath("") / "defaulttexturesquicktime.xml";
-#endif
-	if (fs::exists(mTexturesFilepath)) {
-		// load textures from file if one exists
-		mTexs = VDTexture::readSettings(mVDAnimation, loadFile(mTexturesFilepath));
-	}
-	else {
-		// otherwise create a texture from scratch
-		mTexs.push_back(TextureAudio::create(mVDAnimation));
-	}
+	mState = std::make_shared<ProgramState>();
+	mFactory.setup(mState);
+
+	mAudioSource.setup();
+
+	mOscReceiver = std::shared_ptr<osc::ReceiverUdp>(new osc::ReceiverUdp(9001));
+	mOscReceiver->bind();
+	mOscReceiver->listen();
+
+	mOscReceiver->setListener("/progs/effect", [&](const osc::Message msg) {
+		ProgramRef s = mState->getProgram(msg.getArgString(0));
+		if (s) {
+			s->setEffect(msg.getArgString(1));
+		}
+	});
+
+	mOscReceiver->setListener("/progs/effect/clear", [&](const osc::Message msg) {
+		ProgramRef s = mState->getProgram(msg.getArgString(0));
+		if (s) {
+			s->clearEffect();
+		}
+	});
+
+	mOscReceiver->setListener("/progs/combinator", [&](const osc::Message msg) {
+		ProgramRef s = mState->getProgram(msg.getArgString(0));
+		if (s) {
+			s->setConnection(msg.getArgString(1));
+		}
+	});
+
+	mOscReceiver->setListener("/progs", [&](const osc::Message msg) {
+		mState->setProgram(msg.getArgString(0), msg.getArgString(1), std::bind(&ProgramFactory::createProgram, mFactory, msg.getArgString(1)));
+	});
+
+	mOscReceiver->setListener("/progs/uniform", [&](const osc::Message msg) {
+		ProgramRef p = mState->getProgram(msg.getArgString(0));
+		if (p) {
+			if(msg.getArgType(2) == osc::ArgType::FLOAT) {
+				p->updateUniform(msg.getArgString(1), msg.getArgFloat(2));
+			}
+			else if (msg.getArgType(2) == osc::ArgType::STRING) {
+				p->updateUniform(msg.getArgString(1), msg.getArgString(2), msg.getArgFloat(3));
+			}
+		}
+	});
+
+
+	gl::Texture::Format fmt;
+	fmt.setWrap(GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER);
+	fmt.setBorderColor(Color::black());
+
+	gl::Fbo::Format fboFmt;
+	fboFmt.setColorTextureFormat(fmt);
+	a = gl::Fbo::create(app::getWindowWidth(), app::getWindowHeight(), fboFmt);
+	b = gl::Fbo::create(app::getWindowWidth(), app::getWindowHeight(), fboFmt);
 }
 void _TBOX_PREFIX_App::fileDrop(FileDropEvent event)
 {
-	int index = 1;
-	string ext = "";
-	// use the last of the dropped files
-	boost::filesystem::path mPath = event.getFile(event.getNumFiles() - 1);
-	string mFile = mPath.string();
-	int dotIndex = mFile.find_last_of(".");
-	int slashIndex = mFile.find_last_of("\\");
-	bool found = false;
-
-	if (dotIndex != std::string::npos && dotIndex > slashIndex) ext = mFile.substr(mFile.find_last_of(".") + 1);
-
-	if (ext == "wav" || ext == "mp3")
-	{
-		for (auto tex : mTexs)
-		{
-			if (!found) {
-				if (tex->getType() == VDTexture::AUDIO) {
-					tex->loadFromFullPath(mFile);
-					found = true;
-				}
-			}
-		}
-	}
-	else if (ext == "png" || ext == "jpg")
-	{
-		for (auto tex : mTexs)
-		{
-			if (!found) {
-				if (tex->getType() == VDTexture::IMAGE) {
-					tex->loadFromFullPath(mFile);
-					found = true;
-				}
-			}
-		}
-	}
-	else if (ext == "mov")
-	{
-		for (auto tex : mTexs)
-		{
-			if (!found) {
-				if (tex->getType() == VDTexture::MOVIE) {
-					tex->loadFromFullPath(mFile);
-					found = true;
-				}
-			}
-		}
-	}
-	else if (ext == "")
-	{
-		// try loading image sequence from dir
-		for (auto tex : mTexs)
-		{
-			if (!found) {
-				if (tex->getType() == VDTexture::IMAGESEQUENCE) {
-					tex->loadFromFullPath(mFile);
-					found = true;
-				}
-			}
-		}
-	}
-
 }
 void _TBOX_PREFIX_App::update()
 {
+	input::InputState is;
+	is.audioTexture = mAudioSource.getMagSpectrumTexture();
+	is.volume = mAudioSource.getVolume();
+	is.eqTexture = std::bind(&AudioSource::getEqTexture, mAudioSource, std::placeholders::_1);
 
+	mState->update([is](std::shared_ptr<Program> prog) {
+		prog->update(is);
+	});
 }
 void _TBOX_PREFIX_App::cleanup()
 {
@@ -160,14 +163,21 @@ void _TBOX_PREFIX_App::mouseDrag(MouseEvent event)
 void _TBOX_PREFIX_App::draw()
 {
 	gl::clear( Color::black() );
-	i = 0;
-	for (auto tex : mTexs)
-	{
-		int x = 128 * i;
-		gl::draw(tex->getTexture(), Rectf(0 + x, 0, 128 + x, 128));
-		i++;
+
+	ProgramRef s = mState->getProgram("s");
+	if (s) {
+		gl::draw(s->getColorTexture(a, b));
 	}
 }
 
 
-CINDER_APP(_TBOX_PREFIX_App, RendererGl)
+CINDER_APP(_TBOX_PREFIX_App, RendererGl(), [&](App::Settings *settings) {
+	FullScreenOptions options;
+	std::vector<DisplayRef> displays = Display::getDisplays();
+	//settings->setFullScreen(true, options);
+	settings->setWindowSize(displays[0]->getSize());
+	if (displays.size() > 1) {
+		settings->setDisplay(displays[1]);
+	}
+	settings->setFrameRate(60.0f);
+})

@@ -11,7 +11,7 @@
 	git="git://github.com/Videodromm/Cinder-Videodromm-Shaders.git"
 	>
 	<requires>com.videodromm.Videodromm</requires>
-	<supports os="msw" />
+		<supports os="msw" />
   	<supports os="macosx" />
     <supports os="ios" />
 	<includePath>include</includePath>
@@ -19,7 +19,6 @@
 	<headerPattern>include/*.h</headerPattern>
 	<sourcePattern>src/*.cpp</sourcePattern>
 	<sourcePattern>src/*.c</sourcePattern>
-	<requires>com.videodromm.Videodromm-Textures</requires>
 </block>
 <template>templates/Videodromm-Shaders/template.xml</template>
 </cinder>
