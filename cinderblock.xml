@@ -18,7 +18,6 @@
 	<includePath>src</includePath>
 	<headerPattern>include/*.h</headerPattern>
 	<sourcePattern>src/*.cpp</sourcePattern>
-	<sourcePattern>src/*.c</sourcePattern>
 </block>
 <template>templates/Videodromm-Shaders/template.xml</template>
 </cinder>

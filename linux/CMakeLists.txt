@@ -22,7 +22,7 @@ set( EXE_NAME ${PROJECT_NAME} )
 
 set( SRC_FILES
 	${SRC_DIR}/VDShader.cpp
-	${SRC_DIR}/VDApp.cpp
+	${SRC_DIR}/VDApp.c
 )
 
 add_executable( "${EXE_NAME}" ${SRC_FILES} )
