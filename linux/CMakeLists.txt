@@ -21,7 +21,17 @@ endif()
 set( EXE_NAME ${PROJECT_NAME} )
 
 set( SRC_FILES
-	${SRC_DIR}/VDShader.cpp
+	${SRC_DIR}/AudioSource.cpp
+	${SRC_DIR}/ConnectionProgram.cpp
+	${SRC_DIR}/EffectRect.cpp
+	${SRC_DIR}/FadeEffect.cpp
+	${SRC_DIR}/FragmentProgram.cpp
+	${SRC_DIR}/LayerProgram.cpp
+	${SRC_DIR}/PassthroughProgram.cpp
+	${SRC_DIR}/Program.cpp	
+	${SRC_DIR}/ProgramFactory.cpp	
+	${SRC_DIR}/ProgramRect.cpp	
+	${SRC_DIR}/ProgramState.cpp
 	${SRC_DIR}/VDApp.c
 )
 
