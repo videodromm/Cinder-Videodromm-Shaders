@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <cinder>
 <template name="Videodromm: Shaders" parent="org.libcinder.apptemplates.basicopengl">
-	<requires>com.videodromm.Videodromm</requires>
+	<requires>org.libcinder.OSC</requires>
 	<requires>com.videodromm.Videodromm-Shaders</requires>
 	<source replaceContents="true" replaceName="true">src/_TBOX_PREFIX_App.cpp</source>
 </template>

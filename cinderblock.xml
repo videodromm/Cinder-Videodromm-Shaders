@@ -10,7 +10,7 @@
 	url="https://github.com/Videodromm/Cinder-Videodromm-Shaders"
 	git="git://github.com/Videodromm/Cinder-Videodromm-Shaders.git"
 	>
-	<requires>com.videodromm.Videodromm</requires>
+	<requires>org.libcinder.OSC</requires>
 		<supports os="msw" />
   	<supports os="macosx" />
     <supports os="ios" />
