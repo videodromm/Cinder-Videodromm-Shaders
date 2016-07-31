@@ -36,7 +36,7 @@ namespace input {
 		case InputType::VOLUME:
 			return s.volume;
 		default:
-			throw std::exception("That isn't a float input type.");
+			//throw std::exception("That isn't a float input type.");
 			return -1;
 		}
 	}
@@ -52,7 +52,7 @@ namespace input {
 		case InputType::EQ_TEXTURE:
 			return s.eqTexture(floor(mod));
 		default:
-			throw std::exception("That isn't a texture input type.");
+			//throw std::exception("That isn't a texture input type.");
 			return nullptr;
 		}
 	}
