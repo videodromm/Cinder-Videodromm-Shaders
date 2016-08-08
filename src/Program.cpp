@@ -1,3 +1,4 @@
+// From https://github.com/ulyssesp/oschader-cinder
 #include "Program.h"
 
 using namespace ci;
@@ -105,7 +106,7 @@ ProgramRef Program::getEffect()
 		return mState->getProgram(*mEffect);
 	}
 
-	return nullptr; 
+	return nullptr;
 }
 
 ProgramRef Program::getProgram(std::string id)

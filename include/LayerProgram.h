@@ -1,3 +1,4 @@
+// From https://github.com/ulyssesp/oschader-cinder
 #pragma once
 
 #include "EffectRect.h"
@@ -13,5 +14,5 @@ protected:
 
 private:
 	std::string mConnection;
-	ci::gl::FboRef mFbo; 
+	ci::gl::FboRef mFbo;
 };

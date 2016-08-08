@@ -1,4 +1,4 @@
-# Videodromm
+#  From https://github.com/ulyssesp/oschader-cinder
 cmake_minimum_required( VERSION 2.8 FATAL_ERROR )
 set( CMAKE_VERBOSE_MAKEFILE on )
 
@@ -28,9 +28,9 @@ set( SRC_FILES
 	${SRC_DIR}/FragmentProgram.cpp
 	${SRC_DIR}/LayerProgram.cpp
 	${SRC_DIR}/PassthroughProgram.cpp
-	${SRC_DIR}/Program.cpp	
-	${SRC_DIR}/ProgramFactory.cpp	
-	${SRC_DIR}/ProgramRect.cpp	
+	${SRC_DIR}/Program.cpp
+	${SRC_DIR}/ProgramFactory.cpp
+	${SRC_DIR}/ProgramRect.cpp
 	${SRC_DIR}/ProgramState.cpp
 	${SRC_DIR}/VDApp.c
 )

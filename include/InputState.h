@@ -1,3 +1,4 @@
+// From https://github.com/ulyssesp/oschader-cinder
 #pragma once
 
 #include "cinder/gl/gl.h"
@@ -23,7 +24,7 @@ namespace input {
 			return InputType::EQ_TEXTURE;
 		}
 		else {
-			return InputType::NULL_T; 
+			return InputType::NULL_T;
 		}
 	}
 

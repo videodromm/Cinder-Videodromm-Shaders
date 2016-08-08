@@ -1,3 +1,4 @@
+// From https://github.com/ulyssesp/oschader-cinder
 #include "FadeEffect.h"
 
 using namespace ci;
@@ -18,7 +19,7 @@ ci::gl::Texture2dRef FadeEffect::getColorTexture(ci::gl::FboRef base, ci::gl::Fb
 		gl::ScopedTextureBind baseT(base->getColorTexture(), 0);
 		gl::ScopedTextureBind lastT(mLastFrame->getColorTexture(), 1);
 
-		// Draw the base 
+		// Draw the base
 		Program::draw();
 	}
 

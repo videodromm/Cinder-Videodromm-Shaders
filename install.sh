@@ -1,3 +1,4 @@
+echo From https://github.com/ulyssesp/oschader-cinder
 echo Install dependencies
 echo Cinder-Hap2
 git clone https://github.com/videodromm/Cinder-Hap2 ../Cinder-Hap2

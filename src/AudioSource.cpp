@@ -1,3 +1,4 @@
+// From https://github.com/ulyssesp/oschader-cinder
 #include "AudioSource.h"
 
 #include "cinder/app/App.h"
@@ -86,7 +87,7 @@ float AudioSource::getHighestVolumePos() {
 	return max / size;
 }
 
-float AudioSource::getVolume() 
+float AudioSource::getVolume()
 {
 	return mMonitor->getVolume() * mMult;
 }

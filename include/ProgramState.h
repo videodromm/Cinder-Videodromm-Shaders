@@ -1,3 +1,4 @@
+// From https://github.com/ulyssesp/oschader-cinder
 #pragma once
 
 #include "InputState.h"
@@ -14,7 +15,7 @@ public:
 	void setProgram(std::string id, std::string name, std::function<std::shared_ptr<Program>()>);
 	void clearProgram(std::string id);
 	std::shared_ptr<Program> getProgram(std::string id);
-	
+
 private:
 	std::map<std::string, std::pair<std::string, std::shared_ptr<Program>>> mState;
 };

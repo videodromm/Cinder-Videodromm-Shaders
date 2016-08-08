@@ -1,3 +1,4 @@
+// From https://github.com/ulyssesp/oschader-cinder
 #include "ConnectionProgram.h"
 
 void ConnectionProgram::setConnection(std::string c)

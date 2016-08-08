@@ -3,7 +3,7 @@
 <block
 	name="Videodromm-Shaders"
 	id="com.videodromm.Videodromm-Shaders"
-	author="Bruce Lane"
+	author="Ulysses Popple, Bruce Lane"
 	license="GNU AFFERO GENERAL PUBLIC LICENSE"
     version="1.0"
 	summary="Videodromm block for Cinder 0.9"

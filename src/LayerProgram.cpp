@@ -1,3 +1,4 @@
+// From https://github.com/ulyssesp/oschader-cinder
 #include "LayerProgram.h"
 
 using namespace ci;
