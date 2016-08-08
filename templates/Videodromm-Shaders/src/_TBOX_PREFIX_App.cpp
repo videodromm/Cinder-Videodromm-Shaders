@@ -10,10 +10,19 @@
 #include "InputState.h"
 #include "ProgramFactory.h"
 #include "ProgramState.h"
+// Settings
+#include "VDSettings.h"
+// Session
+#include "VDSession.h"
+// Animation
+#include "VDAnimation.h"
+
+#include "VDTexture.h"
 
 using namespace ci;
 using namespace ci::app;
 using namespace std;
+using namespace VideoDromm;
 
 class _TBOX_PREFIX_App : public App {
 
@@ -26,6 +35,18 @@ public:
 	void						fileDrop(FileDropEvent event) override;
 	void						cleanup() override;
 private:
+	// Settings
+	VDSettingsRef				mVDSettings;
+	// Session
+	VDSessionRef				mVDSession;
+	// Log
+	VDLogRef					mVDLog;
+	// Animation
+	VDAnimationRef				mVDAnimation;
+
+	VDTextureList				mTexs;
+	fs::path					mTexturesFilepath;
+
 	int							i, x;
 	std::shared_ptr<osc::ReceiverUdp> mOscReceiver;
 
@@ -39,6 +60,14 @@ private:
 
 void _TBOX_PREFIX_App::setup()
 {
+	// Settings
+	mVDSettings = VDSettings::create();
+	// Session
+	mVDSession = VDSession::create(mVDSettings);
+	// Animation
+	mVDAnimation = VDAnimation::create(mVDSettings, mVDSession);
+
+
 	mState = std::make_shared<ProgramState>();
 	mFactory.setup(mState);
 
@@ -96,6 +125,10 @@ void _TBOX_PREFIX_App::setup()
 }
 void _TBOX_PREFIX_App::fileDrop(FileDropEvent event)
 {
+	int index = (int)(event.getX() / (mVDSettings->uiElementWidth + mVDSettings->uiMargin));
+	boost::filesystem::path mPath = event.getFile(event.getNumFiles() - 1);
+	string mFile = mPath.string();
+
 }
 void _TBOX_PREFIX_App::update()
 {
@@ -110,13 +143,26 @@ void _TBOX_PREFIX_App::update()
 }
 void _TBOX_PREFIX_App::cleanup()
 {
+	// save textures
+	VDTexture::writeSettings(mTexs, writeFile(mTexturesFilepath));
+
 	quit();
 }
 void _TBOX_PREFIX_App::mouseDown(MouseEvent event)
 {
+	for (auto tex : mTexs)
+	{
+		tex->setXLeft(event.getX());
+		tex->setYTop(event.getY());
+	}
 }
 void _TBOX_PREFIX_App::mouseDrag(MouseEvent event)
 {
+	for (auto tex : mTexs)
+	{
+		tex->setXRight(event.getX());
+		tex->setYBottom(event.getY());
+	}
 }
 
 void _TBOX_PREFIX_App::draw()
