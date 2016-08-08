@@ -5,8 +5,6 @@ echo Cinder-Spout
 git clone https://github.com/brucelane/Cinder-Spout ../Cinder-Spout
 echo Cinder-Syphon
 git clone https://github.com/naychrist/Cinder-Syphon ../Cinder-Syphon
-echo Cinder-Videodromm-Textures
-git clone https://github.com/videodromm/Cinder-Videodromm-Textures ../Cinder-Videodromm-Textures
 echo Cinder-Videodromm
 git clone https://github.com/videodromm/Cinder-Videodromm ../Cinder-Videodromm
 echo Required Cinder blocks checked out
