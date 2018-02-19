@@ -101,7 +101,7 @@ void _TBOX_PREFIX_App::fileDrop(FileDropEvent event)
 	int index = 1;
 	string ext = "";
 	// use the last of the dropped files
-	boost::filesystem::path mPath = event.getFile(event.getNumFiles() - 1);
+	ci::fs::path mPath = event.getFile(event.getNumFiles() - 1);
 	string mFile = mPath.string();
 	int dotIndex = mFile.find_last_of(".");
 	int slashIndex = mFile.find_last_of("\\");
