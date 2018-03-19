@@ -10,14 +10,19 @@
 	url="https://github.com/Videodromm/Cinder-Videodromm-Shaders"
 	git="git://github.com/Videodromm/Cinder-Videodromm-Shaders.git"
 	>
-	<requires>com.videodromm.Videodromm</requires>
-		<supports os="msw" />
+	<supports os="msw" />
   	<supports os="macosx" />
     <supports os="ios" />
+	<requires>com.wk.websocketpp</requires>
 	<includePath>include</includePath>
 	<includePath>src</includePath>
 	<headerPattern>include/*.h</headerPattern>
 	<sourcePattern>src/*.cpp</sourcePattern>
+		<platform os="msw">
+		<libraryPath>lib</libraryPath>
+		<requires>fr.batchass.spout</requires>
+		<requires>mb.cinder.midi2</requires>
+	</platform>
 </block>
 <template>templates/Videodromm-Shaders/template.xml</template>
 </cinder>

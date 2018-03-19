@@ -59,13 +59,9 @@ void _TBOX_PREFIX_App::setup()
 	// Session
 	mVDSession = VDSession::create(mVDSettings);
 	// Animation
-	mVDAnimation = VDAnimation::create(mVDSettings, mVDSession);
+	mVDAnimation = VDAnimation::create(mVDSettings);
 	// initialize
-#if (defined(  CINDER_MSW) )
 	mTexturesFilepath = getAssetPath("") / "defaulttextures.xml";
-#else
-	mTexturesFilepath = getAssetPath("") / "defaulttexturesquicktime.xml";
-#endif
 	if (fs::exists(mTexturesFilepath)) {
 		// load textures from file if one exists
 		mTexs = VDTexture::readSettings(mVDAnimation, loadFile(mTexturesFilepath));
@@ -194,7 +190,7 @@ void _TBOX_PREFIX_App::update()
 	mGlslB->uniform("iGlobalTime", (float)(getElapsedSeconds()/2));
 	mGlslB->uniform("iChannel0", 0);
 
-	mVDSettings->iBlendMode = getElapsedFrames()/48 % 27;
+	//mVDSettings->iBlendMode = getElapsedFrames()/48 % 27;
 	mGlslMix->uniform("iGlobalTime", (float)getElapsedSeconds());
 	mGlslMix->uniform("iResolution", vec3(mVDSettings->mFboWidth, mVDSettings->mFboHeight, 1.0));
 	mGlslMix->uniform("iMouse", mVDAnimation->getVec4UniformValueByName("iMouse"));

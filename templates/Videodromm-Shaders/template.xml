@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <cinder>
 <template name="Videodromm: Shaders" parent="org.libcinder.apptemplates.basicopengl">
-	<requires>org.libcinder.OSC</requires>
 	<requires>com.videodromm.Videodromm-Shaders</requires>
+	<requires>com.wk.websocketpp</requires>
+	<platform os="msw">
+		<requires>fr.batchass.spout</requires>
+		<requires>mb.cinder.midi2</requires>
+	</platform>
 	<source replaceContents="true" replaceName="true">src/_TBOX_PREFIX_App.cpp</source>
 </template>
 </cinder>
